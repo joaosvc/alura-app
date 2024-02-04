@@ -7,11 +7,7 @@ import FormNavigationButtons from "@/components/auth/elements/navigation";
 import { IAuthFormData } from "@/components/auth/form/protocols";
 import { FormEvent, useEffect, useState } from "react";
 
-const steps: string[][] = [
-  ["email"],
-  ["name", "lastname"],
-  ["password", "confirmPassword"],
-];
+const steps: string[][] = [["email"], ["password"]];
 
 const initialFormData = steps.reduce(
   (acc, stepFields) =>
@@ -19,7 +15,7 @@ const initialFormData = steps.reduce(
   {}
 );
 
-export default function SignupForm() {
+export default function SigninForm() {
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<IAuthFormData>(initialFormData);
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -56,7 +52,11 @@ export default function SignupForm() {
 
       if (isLastStep) {
         setLoading(true);
-        //TODO: call signup service
+        //TODO: call signin service
+
+        //TODO: simulate handling a request
+        await new Promise((resolve) => setTimeout(resolve, 3_000));
+
         setLoading(false);
       } else {
         handleNextStep();
@@ -76,64 +76,22 @@ export default function SignupForm() {
             value={formData.email}
             placeholder="name@company.com"
             onChange={handleInputChange}
-            required
+            disabled={loading}
           />
         </div>
       )}
       {currentStep === 1 && (
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <FormLabel htmlFor="name">Nome</FormLabel>
-            <FormInput
-              type="text"
-              name="name"
-              id="name"
-              value={formData.name}
-              placeholder="Seu nome"
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <FormLabel htmlFor="lastname">Sobrenome</FormLabel>
-            <FormInput
-              type="text"
-              name="lastname"
-              id="lastname"
-              value={formData.lastname}
-              placeholder="Seu sobrenome"
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-        </div>
-      )}
-      {currentStep === 2 && (
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <FormLabel htmlFor="password">Senha</FormLabel>
-            <FormInput
-              type="password"
-              name="password"
-              id="password"
-              value={formData.password}
-              placeholder="••••••••"
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <FormLabel htmlFor="confirm-password">Confirmar senha</FormLabel>
-            <FormInput
-              type="password"
-              name="confirmPassword"
-              id="confirmPassword"
-              value={formData.confirmPassword}
-              placeholder="••••••••"
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+        <div>
+          <FormLabel htmlFor="password">Senha</FormLabel>
+          <FormInput
+            type="password"
+            name="password"
+            id="password"
+            value={formData.password}
+            placeholder="••••••••"
+            onChange={handleInputChange}
+            disabled={loading}
+          />
         </div>
       )}
 
@@ -143,10 +101,12 @@ export default function SignupForm() {
         loading={loading}
         currentFieldsFilled={currentFieldsFilled}
         handleBackStep={handleBackStep}
+        holder="Entrar na sua conta"
+        onHolder="Entrando na conta..."
       />
 
-      <FormAccountLink href="signin" holder="Faça login aqui">
-        Já possui uma conta?
+      <FormAccountLink href="signup" holder="Crie aqui">
+        Não possui uma conta?
       </FormAccountLink>
     </form>
   );

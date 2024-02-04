@@ -4,6 +4,8 @@ interface IFormNavigationButtonsProps {
   currentStep: number;
   lastStep: number;
   loading: boolean;
+  holder: string;
+  onHolder: string;
   currentFieldsFilled: boolean;
   handleBackStep: () => void;
 }
@@ -13,6 +15,8 @@ export default function FormNavigationButtons({
   lastStep,
   loading,
   currentFieldsFilled,
+  holder,
+  onHolder,
   handleBackStep,
 }: IFormNavigationButtonsProps) {
   return (
@@ -20,8 +24,11 @@ export default function FormNavigationButtons({
       {currentStep > 0 && (
         <button
           type="button"
-          className="w-20 border text-white sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className={`w-20 border text-white sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+            loading && "cursor-not-allowed"
+          }`}
           onClick={handleBackStep}
+          disabled={loading}
         >
           Voltar
         </button>
@@ -52,10 +59,10 @@ export default function FormNavigationButtons({
                 height={18}
                 width={18}
               />
-              <span className="ml-2">Criando conta...</span>
+              <span className="ml-2">{onHolder}</span>
             </span>
           ) : (
-            "Crie uma conta"
+            holder
           )}
         </button>
       )}

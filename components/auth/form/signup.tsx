@@ -144,7 +144,7 @@ export default function SignupForm() {
       if (isLastStep) {
         setLoading(true);
 
-        if (handleSubmitErrors(false, {}, true)) {
+        if (handleSubmitErrors(true, {}, true)) {
           return setLoading(false);
         }
 

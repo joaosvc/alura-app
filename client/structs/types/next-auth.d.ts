@@ -4,6 +4,7 @@ interface User {
   name: string;
   lastname: string;
   email: string;
+  jwtToken: string;
 }
 
 interface CustomUser extends User {}

@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<any | null> {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("missing-credentials");
         }
@@ -59,6 +59,7 @@ export const authOptions: NextAuthOptions = {
           name: token.name,
           lastname: token.lastname,
           email: token.email,
+          jwtToken: token.jwtToken,
         },
       };
     },
@@ -68,6 +69,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           lastname: user.lastname,
           email: user.email,
+          jwtToken: user.jwtToken,
         };
       }
 

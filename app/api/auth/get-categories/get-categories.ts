@@ -1,13 +1,14 @@
 import { ALURA_API_URL } from "@/client/api/protocols";
+import { Category } from "@/client/models/category/category";
 
-export const getCategories = async (jwtToken: string): Promise<string[]> => {
-  const response = await fetch(`${ALURA_API_URL}/categories`, {
+export const getCategories = async (jwtToken: string): Promise<Category[]> => {
+  const response = await fetch(`${ALURA_API_URL}/categories/modules`, {
     headers: {
+      "Content-Type": "application/json",
       "X-JWT-Token": jwtToken,
     },
   });
-  const data: { category: string }[] = Object.values(await response.json());
+  const data: Category[] = Object.values(await response.json());
 
-  console.log(process.env.ALURA_API_URL);
-  return data.map(({ category }) => category);
+  return <Category[]>data;
 };

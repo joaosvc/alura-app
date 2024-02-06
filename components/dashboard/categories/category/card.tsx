@@ -14,7 +14,7 @@ export default function CategoryCard({
 
   return (
     <div className="w-1/2 lg:w-1/4 p-2" {...props}>
-      <Link href={`/modules/${category}`}>
+      <Link href={`/modules/${btoa(category)}`}>
         <div className="p-3 lg:p-6 pb-1 flex flex-col justify-evenly lg:pb-2 h-full hover:bg-gray-100 dark:hover:bg-gray-800 rounded cursor-pointer">
           <h2 className="font-bold text-lg">{category}</h2>
 

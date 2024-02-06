@@ -11,7 +11,7 @@ interface CategoryModulesProps {
 
 export default function CategoryModules({ params }: CategoryModulesProps) {
   const user = useCurrentUser();
-  const category = decodeURIComponent(params.category);
+  const category = atob(decodeURIComponent(params.category));
 
   return (
     <div className="mt-32">

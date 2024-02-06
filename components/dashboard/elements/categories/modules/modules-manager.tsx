@@ -1,7 +1,9 @@
 import { getModules } from "@/app/api/get-modules/get-modules";
-import { Module } from "@/client/models/category/module";
+import { CategoryModules } from "@/client/models/category/module";
 import { User } from "@/client/structs/types/next-auth";
 import { HTMLProps, useEffect, useState } from "react";
+import CourseCard from "./course/card";
+import ModulesSkeleton from "./module/modules-skeleton";
 
 interface ModulesManagerProps extends HTMLProps<HTMLDivElement> {
   user: User;
@@ -15,19 +17,16 @@ export default function ModulesManager({
   back,
   ...props
 }: ModulesManagerProps) {
-  const [modules, setModules] = useState<Module[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [count, setCount] = useState(0);
+  const [modules, setModules] = useState<CategoryModules>({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async (category: string, jwtToken: string) => {
-      setCount((prev) => prev + 1);
-      setModules([]);
+      setModules({});
+      setLoading(true);
 
       try {
-        if (category && user.jwtToken) {
-          setModules(await getModules(category, user.jwtToken));
-        }
+        setModules(await getModules(category, jwtToken));
       } catch (error) {
         console.error("Error fetching modules:", error);
       } finally {
@@ -40,29 +39,40 @@ export default function ModulesManager({
     }
   }, [category, user.jwtToken]);
 
-  const NavigationButtons = () => {
-    return (
-      <div className="flex flex-row justify-between mb-6">
-        <p
-          className="text-xs p-2 border border-gray-600 rounded-md cursor-pointer"
-          onClick={back}
-        >
-          Categorias
-        </p>
-      </div>
-    );
+  const ModulesContent = () => {
+    if (loading) {
+      return <ModulesSkeleton />;
+    }
+    const categories = Object.entries(modules);
+
+    if (categories.length > 0) {
+      return categories.map(([category, data]) => (
+        <div key={category} className="mb-10">
+          <h2 className="text-xl font-bold mb-2 ml-2">{category}</h2>
+
+          <div className="w-full flex flex-wrap mx-auto max-w-full">
+            {Object.entries(data).map(([courseName, icon]) => (
+              <CourseCard key={courseName} course={courseName} icon={icon} />
+            ))}
+          </div>
+        </div>
+      ));
+    } else {
+      return (
+        <div className="w-full flex justify-center">
+          <div className="w-11/12 lg:w-full flex items-center justify-center p-6 pr-3 pl-3 rounded-md bg-gray-100 dark:bg-gray-800">
+            <p>Nenhum modulo disponível no momento</p>
+          </div>
+        </div>
+      );
+    }
   };
 
   return (
-    <div className="w-full" {...props}>
-      <NavigationButtons />
-
-      <p>Category: {category}</p>
-      <p>Count: {count}</p>
-
-      <pre>
-        <code>{JSON.stringify(modules, null, 2)}</code>
-      </pre>
+    <div className="w-full h-auto mt-16 lg:mt-24" {...props}>
+      <div className="w-full flex flex-wrap justify-between">
+        <ModulesContent />
+      </div>
     </div>
   );
 }

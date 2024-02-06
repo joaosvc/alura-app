@@ -51,16 +51,18 @@ export default function Categories({
       ));
     } else {
       return (
-        <div className="w-full flex items-center justify-center p-6 rounded-md bg-gray-800">
-          <p>Nenhuma categoria disponível no momento</p>
+        <div className="w-full flex justify-center">
+          <div className="w-11/12 lg:w-full flex items-center justify-center p-6 pr-3 pl-3 rounded-md bg-gray-100 dark:bg-gray-800">
+            <p>Nenhuma categoria disponível no momento</p>
+          </div>
         </div>
       );
     }
   };
 
   return (
-    <div className="w-full h-auto" {...props}>
-      <div className="w-full flex flex-wrap justify-between">
+    <div className="w-full h-auto mt-20 lg:mt-48" {...props}>
+      <div className="w-full flex flex-wrap justify-between mx-auto max-w-full">
         <CategoryContent />
       </div>
     </div>

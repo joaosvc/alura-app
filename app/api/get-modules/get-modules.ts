@@ -1,10 +1,10 @@
 import { ALURA_API_URL } from "@/client/api/protocols";
-import { Module } from "@/client/models/category/module";
+import { CategoryModules } from "@/client/models/category/module";
 
 export const getModules = async (
   category: string,
   jwtToken: string
-): Promise<Module[]> => {
+): Promise<CategoryModules> => {
   const response = await fetch(`${ALURA_API_URL}/category/modules`, {
     method: "POST",
     headers: {
@@ -13,7 +13,7 @@ export const getModules = async (
     },
     body: JSON.stringify({ category }),
   });
-  const data: Module[] = await response.json();
+  const data: CategoryModules = await response.json();
 
-  return <Module[]>data;
+  return <CategoryModules>data;
 };

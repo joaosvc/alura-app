@@ -8,7 +8,7 @@ export default function Header({ user }: { user: User }) {
   const handleLogout = async () => await signOut();
 
   return (
-    <header className="flex justify-between items-center p-6 px-12 lg:px-8 mx-auto max-w-7xl">
+    <header className="flex flex-row justify-between items-center p-6 px-12 lg:px-8 mx-auto max-w-7xl">
       <Profile user={user} type="dashboard" />
 
       <div className="cursor-pointer hover:underline" onClick={handleLogout}>

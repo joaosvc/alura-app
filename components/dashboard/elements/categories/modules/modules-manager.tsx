@@ -52,7 +52,12 @@ export default function ModulesManager({
 
           <div className="w-full flex flex-wrap mx-auto max-w-full">
             {Object.entries(data).map(([courseName, icon]) => (
-              <CourseCard key={courseName} course={courseName} icon={icon} />
+              <CourseCard
+                key={courseName}
+                course={courseName}
+                icon={icon}
+                count={Object.keys(data).length}
+              />
             ))}
           </div>
         </div>

@@ -1,15 +1,16 @@
 import { User } from "@/client/structs/types/next-auth";
+import { HTMLProps } from "react";
 
-interface ProfileProps {
+interface ProfileProps extends HTMLProps<HTMLDivElement> {
   user: User;
   type?: "dashboard" | "user";
 }
 
-export default function Profile({ user, type }: ProfileProps) {
+export default function Profile({ user, type, ...props }: ProfileProps) {
   const isDashboard = type === "dashboard";
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" {...props}>
       <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
         {isDashboard ? "Dashboard" : user.name}
       </h1>

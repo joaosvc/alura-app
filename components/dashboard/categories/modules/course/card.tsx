@@ -5,11 +5,17 @@ import { useInView } from "react-intersection-observer";
 
 export interface CourseCardProps extends HTMLProps<HTMLDivElement> {
   course: string;
-  icon: string;
   animation?: boolean;
+  courseData: {
+    uuid: string;
+    icon: string;
+  };
 }
 
-export const CourseCardWithAnimation = ({ course, icon }: CourseCardProps) => {
+export const CourseCardWithAnimation = ({
+  course,
+  courseData,
+}: CourseCardProps) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
@@ -22,19 +28,19 @@ export const CourseCardWithAnimation = ({ course, icon }: CourseCardProps) => {
       animate={inView ? { opacity: 1, marginTop: 0 } : {}}
       transition={{ duration: 0.2 }}
     >
-      <CourseCard course={course} icon={icon} />
+      <CourseCard course={course} courseData={courseData} />
     </motion.div>
   );
 };
 
 export default function CourseCard({
   course,
-  icon,
+  courseData,
   animation,
   ...props
 }: CourseCardProps) {
   if (animation) {
-    return <CourseCardWithAnimation course={course} icon={icon} />;
+    return <CourseCardWithAnimation course={course} courseData={courseData} />;
   }
 
   return (
@@ -42,7 +48,7 @@ export default function CourseCard({
       <div className="h-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer">
         <div className="h-full flex flex-col lg:flex-row items-center justify-around p-3 pb-2 pt-2 lg:p-3 lg:space-x-4">
           <Image
-            src={`/course-icons/${icon}`}
+            src={`/course-icons/${courseData.icon}`}
             alt={`Icon ${course}`}
             width={40}
             height={40}

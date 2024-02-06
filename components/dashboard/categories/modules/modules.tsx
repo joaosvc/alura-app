@@ -65,11 +65,11 @@ export default function CategoryModules({
             <h2 className="text-xl font-bold mb-2 ml-2">{category}</h2>
 
             <div className="grid grid-cols-2 lg:grid-cols-4">
-              {courses.map(([course, icon]) => (
+              {courses.map(([course, data]) => (
                 <CourseCard
                   key={course}
                   course={course}
-                  icon={icon}
+                  courseData={data}
                   animation={true}
                 />
               ))}

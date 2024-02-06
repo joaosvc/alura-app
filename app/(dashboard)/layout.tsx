@@ -1,6 +1,6 @@
 import { authOptions } from "@/client/next-auth";
 import { getServerSession } from "next-auth";
-import Header from "@/components/dashboard/elements/header/header";
+import Header from "@/components/header/header";
 import AuthProvider from "@/components/auth/provider/provider";
 
 export default async function Layout({

@@ -11,7 +11,7 @@ export const getModules = async (
       "Content-Type": "application/json",
       "X-JWT-Token": jwtToken,
     },
-    body: JSON.stringify({ category }),
+    body: JSON.stringify({ category: String(category ?? "") }),
   });
   const data: CategoryModules = await response.json();
 

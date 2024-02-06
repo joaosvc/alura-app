@@ -7,7 +7,7 @@ interface ProfileProps extends HTMLProps<HTMLDivElement> {
 }
 
 export default function Profile({ user, type, ...props }: ProfileProps) {
-  const isDashboard = type === "dashboard";
+  const isDashboard = !type || type === "dashboard";
 
   return (
     <div className="flex flex-col" {...props}>

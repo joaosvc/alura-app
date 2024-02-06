@@ -1,3 +1,5 @@
+"use client";
+
 import { signOut } from "next-auth/react";
 import { User } from "@/client/structs/types/next-auth";
 import Profile from "./profile";

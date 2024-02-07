@@ -3,7 +3,7 @@ import { CategoryModules } from "@/client/models/category/module";
 import { RequestResponse } from "../protocols";
 import { RequestError, SuccessRequest } from "../helpers";
 
-export const getModules = async (
+export const getCategoryModules = async (
   category: string,
   jwtToken: string
 ): Promise<RequestResponse<CategoryModules>> => {

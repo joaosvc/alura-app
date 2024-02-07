@@ -1,4 +1,4 @@
-import { getModules } from "@/app/api/get-modules/get-modules";
+import { getCategoryModules } from "@/app/api/get-category-modules/get-category-modules";
 import { CategoryModules as ICategoryModules } from "@/client/models/category/module";
 import { User } from "@/client/structs/types/next-auth";
 import { HTMLProps, useEffect, useRef, useState } from "react";
@@ -31,7 +31,7 @@ export default function CategoryModules({
         setLoading(true);
 
         try {
-          const modulesResponse = await getModules(category, jwtToken);
+          const modulesResponse = await getCategoryModules(category, jwtToken);
 
           if (modulesResponse.success) {
             setModules(modulesResponse.body!);

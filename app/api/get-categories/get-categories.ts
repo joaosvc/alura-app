@@ -6,11 +6,13 @@ import { RequestError, SuccessRequest } from "../helpers";
 export const getCategories = async (
   jwtToken: string
 ): Promise<RequestResponse<Category[]>> => {
-  const response = await fetch(`${ALURA_API_URL}/categories/modules`, {
+  const response = await fetch(`${ALURA_API_URL}/categories`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       "X-JWT-Token": jwtToken,
     },
+    body: JSON.stringify({ modules: true }),
   });
 
   if (!response.ok) {

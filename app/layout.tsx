@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { PageDefaultTitle } from "@/client/hooks/use-page-title";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Alura App",
+  title: PageDefaultTitle,
   description: "Alura App - Courses Packages",
 };
 

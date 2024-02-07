@@ -5,6 +5,7 @@ import { HTMLProps, useEffect, useRef, useState } from "react";
 import ModulesSkeleton from "./module/skeleton";
 import UnavailableBox from "@/components/elements/unavailable-box";
 import CourseCard from "./course/card";
+import { setPageBaseTitle } from "@/client/hooks/use-page-title";
 
 interface ModulesProps extends HTMLProps<HTMLDivElement> {
   user: User;
@@ -17,37 +18,44 @@ export default function CategoryModules({
   ...props
 }: ModulesProps) {
   const [modules, setModules] = useState<ICategoryModules>({});
+  const [isAvaliable, setAvaliable] = useState(true);
   const [loading, setLoading] = useState(true);
 
+  const isMounted = useRef(false);
+
   useEffect(() => {
-    let retryFetchInterval: NodeJS.Timeout | null = null;
+    if (!isMounted.current) {
+      isMounted.current = true;
 
-    const fetchModules = async (category: string, jwtToken: string) => {
-      setLoading(true);
+      const fetchModules = async (category: string, jwtToken: string) => {
+        setLoading(true);
 
-      try {
-        setModules(await getModules(category, jwtToken));
-        setLoading(false);
+        try {
+          const modulesResponse = await getModules(category, jwtToken);
 
-        if (retryFetchInterval) {
-          clearInterval(retryFetchInterval);
+          if (modulesResponse.success) {
+            setModules(modulesResponse.body!);
+
+            setPageBaseTitle(category);
+          } else {
+            if (modulesResponse.error === "category-not-found") {
+              setAvaliable(false);
+              setPageBaseTitle("Categoria não encontrada");
+            } else {
+              throw new Error(modulesResponse.error);
+            }
+          }
+        } catch (error) {
+          console.error(`Error fetching modules of ${category}`, error);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error(`Error fetching modules of ${category}`, error);
+      };
 
-        retryFetchInterval = setInterval(() => {
-          fetchModules(category, jwtToken);
-        }, 5000);
+      if (category && user.jwtToken) {
+        fetchModules(category, user.jwtToken);
       }
-    };
-
-    if (category && user.jwtToken) {
-      fetchModules(category, user.jwtToken);
     }
-
-    return () => {
-      if (retryFetchInterval) clearInterval(retryFetchInterval);
-    };
   }, [category, user.jwtToken]);
 
   const ModulesContent = () => {
@@ -79,7 +87,11 @@ export default function CategoryModules({
       });
     } else {
       return (
-        <UnavailableBox>Nenhum modulo disponível no momento</UnavailableBox>
+        <UnavailableBox>
+          {isAvaliable
+            ? "Nenhum modulo disponível no momento"
+            : "Categoria não encontrada"}
+        </UnavailableBox>
       );
     }
   };

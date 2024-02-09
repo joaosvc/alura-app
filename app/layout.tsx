@@ -1,6 +1,6 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { PageDefaultTitle } from "@/client/hooks/use-page-title";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,7 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={`text-gray-70 dark:text-white bg-white dark:bg-gray-900 ${inter.className}`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

@@ -12,11 +12,9 @@ export default async function Layout({
 
   return (
     <AuthProvider session={session}>
-      <div className="min-h-screen text-gray-70 dark:text-white bg-white dark:bg-gray-900">
-        <Header user={session.user} />
+      <Header user={session.user} />
 
-        <main>{children}</main>
-      </div>
+      <main>{children}</main>
     </AuthProvider>
   );
 }

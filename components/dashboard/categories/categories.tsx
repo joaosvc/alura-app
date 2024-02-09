@@ -47,17 +47,15 @@ export default function Categories({ user, ...props }: CategoriesProps) {
   const CategoryContent = () => {
     if (loading) {
       return <CategorySkeleton />;
-    }
-
-    if (categories.length > 0) {
-      return categories.map((category, index) => (
-        <CategoryCard key={index} category={category} />
-      ));
-    } else {
+    } else if (categories.length === 0) {
       return (
         <UnavailableBox>Nenhuma categoria disponível no momento</UnavailableBox>
       );
     }
+
+    return categories.map((category, index) => (
+      <CategoryCard key={index} category={category} />
+    ));
   };
 
   return (

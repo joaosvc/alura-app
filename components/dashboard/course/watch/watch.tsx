@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { HTMLProps, useEffect, useRef, useState } from "react";
+import React, { HTMLProps, useEffect, useRef, useState } from "react";
 import { getCourseModules } from "@/app/api/get-course-modules/get-course-modules";
 import { setPageBaseTitle } from "@/client/hooks/use-page-title";
 import { User } from "@/client/structs/types/next-auth";
 import WatchSkeleton from "./skeleton";
 import UnavailableBox from "@/components/elements/unavailable-box";
 import { motion } from "framer-motion";
+import { getVideoPlaylist } from "@/app/api/get-video-playlist/get-video-playlist";
+import ReactPlayer from "react-player";
 
 interface WatchProps extends HTMLProps<HTMLDivElement> {
   user: User;
@@ -24,8 +26,10 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
   const [isAvaliable, setAvaliable] = useState(true);
   const [loading, setLoading] = useState(true);
   const [currentEpisode, setCurrentEpisode] = useState(0);
+  const [videoUrl, setVideoUrl] = useState("");
 
   const searchParams = useRef<URLSearchParams>();
+  const playerRef = useRef<ReactPlayer>(null);
   const isMounted = useRef(false);
 
   useEffect(() => {
@@ -91,20 +95,34 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
   }, [courseUuid, user.jwtToken, episodes, searchParams]);
 
   useEffect(() => {
-    if (currentEpisode > 0) {
-      if (currentEpisode > episodes.length) {
-        return;
+    const fetchData = async () => {
+      if (currentEpisode > 0) {
+        if (currentEpisode > episodes.length) {
+          return;
+        }
+        const { episode, module, video } = episodes[currentEpisode - 1];
+
+        searchParams.current?.set("episode", episode.toString());
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}?${searchParams.current?.toString()}`
+        );
+
+        const videoResponse = await getVideoPlaylist(courseUuid, module, video);
+
+        if (videoResponse.success && playerRef.current) {
+          setVideoUrl(videoResponse.body!);
+
+          console.log(episodes[currentEpisode - 1]);
+          console.log({
+            videoResponse,
+          });
+        }
       }
+    };
 
-      searchParams.current?.set("episode", currentEpisode.toString());
-      window.history.replaceState(
-        null,
-        "",
-        `${window.location.pathname}?${searchParams.current?.toString()}`
-      );
-
-      console.log("Current episode", currentEpisode);
-    }
+    fetchData();
   }, [currentEpisode]);
 
   const WatchContent = () => {
@@ -124,11 +142,18 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
 
     return (
       <>
-        <div className="bg-gray-800 rounded-xl">
-          <div className="relative max-w-[1280px] w-full pt-[56.25%]"></div>
+        <div className="bg-gray-800 rounded-xl overflow-hidden">
+          <div className="relative max-w-[1280px] w-full pt-[59%] hidden"></div>
+          <ReactPlayer
+            ref={playerRef}
+            controls={true}
+            url={videoUrl}
+            width="100%"
+            height="100%"
+          />
         </div>
 
-        <div className="flex items-center justify-center h-12 pl-4 pr-4 bg-gray-800 rounded-xl overflow-hidden">
+        <div className="flex items-center justify-center h-12 pl-4 pr-4 bg-gray-800 rounded-xl overflow-hidden hidden">
           <p className="line-clamp-2 text-xs text-gray-200">{courseName}</p>
         </div>
       </>

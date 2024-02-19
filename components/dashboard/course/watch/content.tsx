@@ -2,10 +2,10 @@
 import React from "react";
 import UnavailableBox from "@/components/elements/unavailable-box";
 import WatchSkeleton from "./skeleton";
-import ReactPlayer from "react-player";
 import { VideoOptions, WatchEpisode } from "./watch";
 import { BackArrowButton, NextArrowButton } from "./elements/navigation-button";
 import WatchNavigation from "./elements/watch-navigation";
+import Player from "./elements/player";
 
 interface WatchContentProps {
   videoOptions: VideoOptions;
@@ -49,19 +49,9 @@ const WatchContent = ({
       <>
         <div className="bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden relative max-w-[1280px] w-full pt-[56.25%]">
           <div className="absolute top-0 left-0 w-full h-full">
-            <ReactPlayer
-              controls={true}
+            <Player
               url={videoOptions?.url!}
-              width="100%"
-              height="100%"
-              config={{
-                file: {
-                  attributes: {
-                    poster: videoOptions?.thumbnail,
-                    controlsList: "nodownload",
-                  },
-                },
-              }}
+              thumbnail={videoOptions?.thumbnail}
             />
           </div>
         </div>

@@ -159,14 +159,10 @@ export default function SignupForm() {
             body: JSON.stringify(formDataRest),
           });
 
-          if (response.ok) {
-            const responseJson = await response.json();
+          const responseJson = await response.json();
 
-            if (!handleSubmitErrors(response.ok, responseJson)) {
-              router.push("/signin");
-            }
-          } else {
-            console.error("Error", response);
+          if (!handleSubmitErrors(response.ok, responseJson)) {
+            router.push("/signin");
           }
         } catch (error) {
           console.error(error);

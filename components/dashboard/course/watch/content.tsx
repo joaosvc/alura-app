@@ -5,7 +5,7 @@ import WatchSkeleton from "./skeleton";
 import { VideoOptions, WatchEpisode } from "./watch";
 import { BackArrowButton, NextArrowButton } from "./elements/navigation-button";
 import WatchNavigation from "./elements/watch-navigation";
-import Player from "./elements/player";
+import Player from "./elements/react-player";
 
 interface WatchContentProps {
   videoOptions: VideoOptions;

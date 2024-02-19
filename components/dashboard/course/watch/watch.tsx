@@ -139,8 +139,6 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
             url: videoData.body!.url,
             thumbnail: videoData.body!.thumbnail,
           });
-
-          console.log(videoData.body);
         }
 
         setLoadingEpisode(false);

@@ -1,1 +1,1 @@
-export const ALURA_API_URL = "https://alura-api.publicvm.com";
+export const ALURA_API_URL = "https://alura-api-beta.vercel.app";

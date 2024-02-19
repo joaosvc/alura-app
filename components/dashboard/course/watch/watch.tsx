@@ -3,33 +3,41 @@ import React, { HTMLProps, useEffect, useRef, useState } from "react";
 import { getCourseModules } from "@/app/api/get-course-modules/get-course-modules";
 import { setPageBaseTitle } from "@/client/hooks/use-page-title";
 import { User } from "@/client/structs/types/next-auth";
-import WatchSkeleton from "./skeleton";
-import UnavailableBox from "@/components/elements/unavailable-box";
-import { motion } from "framer-motion";
-import { getVideoPlaylist } from "@/app/api/get-video-playlist/get-video-playlist";
-import ReactPlayer from "react-player";
+import { getVideoData } from "@/app/api/get-video-data/get-video-data";
+import WatchContent from "./content";
 
 interface WatchProps extends HTMLProps<HTMLDivElement> {
   user: User;
   courseUuid: string;
 }
 
-interface WatchEpisode {
+export interface WatchEpisode {
   episode: number;
-  module: string;
-  video: string;
+  module: {
+    identifier: string;
+    name: string;
+  };
+  video: {
+    identifier: string;
+    name: string;
+  };
+}
+
+export interface VideoOptions {
+  episode: number;
+  name: string;
+  url: string;
+  thumbnail: string;
 }
 
 export default function Watch({ user, courseUuid, ...props }: WatchProps) {
   const [episodes, setEpisodes] = useState<WatchEpisode[]>([]);
-  const [courseName, setCourseName] = useState("");
-  const [isAvaliable, setAvaliable] = useState(true);
+  const [isAvailable, setAvailable] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [loadingEpisode, setLoadingEpisode] = useState(true);
   const [currentEpisode, setCurrentEpisode] = useState(0);
-  const [videoUrl, setVideoUrl] = useState("");
-
+  const [videoOptions, setVideoOptions] = useState<VideoOptions>();
   const searchParams = useRef<URLSearchParams>();
-  const playerRef = useRef<ReactPlayer>(null);
   const isMounted = useRef(false);
 
   useEffect(() => {
@@ -45,15 +53,20 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
           if (modulesResponse.success) {
             const { courseName, modules } = modulesResponse.body!;
 
-            setCourseName(courseName);
             setPageBaseTitle(courseName);
 
             let currentEpisode = 1;
-            let episodes = modules.flatMap(({ module, videos }) =>
+            let episodes = modules.flatMap(({ module, name, videos }) =>
               videos.map((video) => ({
                 episode: currentEpisode++,
-                module,
-                video,
+                module: {
+                  identifier: module,
+                  name: name,
+                },
+                video: {
+                  identifier: video.video,
+                  name: video.name,
+                },
               }))
             );
 
@@ -75,7 +88,7 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
             setEpisodes(episodes);
           } else {
             if (modulesResponse.error === "course-not-found") {
-              setAvaliable(false);
+              setAvailable(false);
               setPageBaseTitle("Curso não encontrado");
             } else {
               throw new Error(modulesResponse.error);
@@ -101,6 +114,7 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
           return;
         }
         const { episode, module, video } = episodes[currentEpisode - 1];
+        setLoadingEpisode(true);
 
         searchParams.current?.set("episode", episode.toString());
         window.history.replaceState(
@@ -109,66 +123,43 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
           `${window.location.pathname}?${searchParams.current?.toString()}`
         );
 
-        const videoResponse = await getVideoPlaylist(courseUuid, module, video);
+        if (videoOptions) videoOptions.episode = episode;
 
-        if (videoResponse.success && playerRef.current) {
-          setVideoUrl(videoResponse.body!);
+        const videoData = await getVideoData(
+          courseUuid,
+          module.identifier,
+          video.identifier,
+          user.jwtToken
+        );
 
-          console.log(episodes[currentEpisode - 1]);
-          console.log({
-            videoResponse,
+        if (videoData.success) {
+          setVideoOptions({
+            episode,
+            name: video.name,
+            url: videoData.body!.url,
+            thumbnail: videoData.body!.thumbnail,
           });
+
+          console.log(videoData.body);
         }
+
+        setLoadingEpisode(false);
       }
     };
 
     fetchData();
   }, [currentEpisode]);
 
-  const WatchContent = () => {
-    if (loading) {
-      return <WatchSkeleton />;
-    } else if (!isAvaliable || episodes.length === 0) {
-      return (
-        <div className="mt-32">
-          <UnavailableBox>
-            {episodes.length === 0
-              ? "Nenhum episódio disponível"
-              : "Curso não encontrado"}
-          </UnavailableBox>
-        </div>
-      );
-    }
-
-    return (
-      <>
-        <div className="bg-gray-800 rounded-xl overflow-hidden">
-          <div className="relative max-w-[1280px] w-full pt-[59%] hidden"></div>
-          <ReactPlayer
-            ref={playerRef}
-            controls={true}
-            url={videoUrl}
-            width="100%"
-            height="100%"
-          />
-        </div>
-
-        <div className="flex items-center justify-center h-12 pl-4 pr-4 bg-gray-800 rounded-xl overflow-hidden hidden">
-          <p className="line-clamp-2 text-xs text-gray-200">{courseName}</p>
-        </div>
-      </>
-    );
-  };
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
-    >
-      <div className="w-[60vw] mx-auto mt-6 space-y-3 rounded-xl" {...props}>
-        <WatchContent />
-      </div>
-    </motion.div>
+    <div className="w-[60vw] mx-auto mt-6 space-y-3 rounded-xl" {...props}>
+      <WatchContent
+        videoOptions={videoOptions!}
+        episodes={episodes}
+        isAvailable={isAvailable}
+        loading={loading}
+        loadingEpisode={loadingEpisode}
+        onEpisodeChange={(episode) => setCurrentEpisode(episode)}
+      />
+    </div>
   );
 }

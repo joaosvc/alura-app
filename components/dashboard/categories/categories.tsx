@@ -2,9 +2,7 @@ import { getCategories } from "@/app/api/get-categories/get-categories";
 import { User } from "@/client/structs/types/next-auth";
 import { HTMLProps, useEffect, useRef, useState } from "react";
 import { Category } from "@/client/models/category/category";
-import CategorySkeleton from "./category/skeleton";
-import CategoryCard from "./category/card";
-import UnavailableBox from "@/components/elements/unavailable-box";
+import CategoryContent from "./category/content";
 
 interface CategoriesProps extends HTMLProps<HTMLDivElement> {
   user: User;
@@ -13,7 +11,6 @@ interface CategoriesProps extends HTMLProps<HTMLDivElement> {
 export default function Categories({ user, ...props }: CategoriesProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-
   const isMounted = useRef(false);
 
   useEffect(() => {
@@ -44,26 +41,12 @@ export default function Categories({ user, ...props }: CategoriesProps) {
     }
   }, [user.jwtToken]);
 
-  const CategoryContent = () => {
-    if (loading) {
-      return <CategorySkeleton />;
-    } else if (categories.length === 0) {
-      return (
-        <UnavailableBox>Nenhuma categoria disponível no momento</UnavailableBox>
-      );
-    }
-
-    return categories.map((category, index) => (
-      <CategoryCard key={index} category={category} />
-    ));
-  };
-
   return (
     <div
       className="flex flex-wrap justify-between mx-auto max-w-sm lg:max-w-5xl"
       {...props}
     >
-      <CategoryContent />
+      <CategoryContent categories={categories} loading={loading} />
     </div>
   );
 }

@@ -151,7 +151,10 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
   }, [currentEpisode]);
 
   return (
-    <div className="w-[60vw] mx-auto mt-6 space-y-3 rounded-xl" {...props}>
+    <div
+      className="w-[90vw] lg:w-[60vw] mx-auto mt-6 space-y-3 rounded-xl mb-4"
+      {...props}
+    >
       <WatchContent
         videoOptions={videoOptions!}
         episodes={episodes}

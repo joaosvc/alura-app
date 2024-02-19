@@ -23,7 +23,7 @@ export default function WatchNavigation({
   useLayoutEffect(() => {
     const updateItemsPerPage = () => {
       setItemsPerPage(
-        window.innerWidth < 800 ? 10 : window.innerWidth < 1000 ? 15 : 20
+        window.innerWidth < 800 ? 9 : window.innerWidth < 1000 ? 15 : 20
       );
     };
 
@@ -63,7 +63,7 @@ export default function WatchNavigation({
               onClick={() => onSelectEpisode(episode.episode)}
             >
               <p className="text-xs text-gray-700 dark:text-gray-200">
-                {episode.episode}
+                {String(episode.episode).padStart(2, "0")}
               </p>
             </div>
           );

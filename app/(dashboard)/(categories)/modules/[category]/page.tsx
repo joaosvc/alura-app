@@ -15,7 +15,7 @@ export default function CategoryModules({ params }: CategoryModulesProps) {
   const category = getAtobURIDecode(params.category);
 
   return (
-    <div className="mt-32">
+    <div className="mt-8 lg:mt-32">
       <Modules user={user} category={category} />
     </div>
   );

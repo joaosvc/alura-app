@@ -127,7 +127,6 @@ export default function SigninForm() {
         }
 
         router.push("/");
-        setLoading(false);
       } else {
         handleNextStep();
       }

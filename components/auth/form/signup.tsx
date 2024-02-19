@@ -163,18 +163,18 @@ export default function SignupForm() {
           const responseJson = await signupResponse.json();
 
           if (!handleSubmitErrors(signupResponse.ok, responseJson)) {
-            const signinResponse = await signIn("credentials", {
+            await signIn("credentials", {
               email: formData.email,
               password: formData.password,
               redirect: false,
             });
 
             router.push("/");
+          } else {
+            setLoading(false);
           }
         } catch (error) {
           console.error(error);
-        } finally {
-          setLoading(false);
         }
       } else {
         handleNextStep();

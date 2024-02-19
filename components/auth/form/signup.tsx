@@ -149,21 +149,30 @@ export default function SignupForm() {
         }
 
         const { confirmPassword, ...formDataRest } = formData;
-        const response = await fetch("/api/auth/create-user", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formDataRest),
-        });
-        const responseJson = await response.json();
 
-        if (handleSubmitErrors(response.ok, responseJson)) {
-          return setLoading(false);
+        try {
+          const response = await fetch("/api/auth/create-user", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formDataRest),
+          });
+
+          if (response.ok) {
+            const responseJson = await response.json();
+
+            if (!handleSubmitErrors(response.ok, responseJson)) {
+              router.push("/signin");
+            }
+          } else {
+            console.error("Error", response);
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
         }
-
-        router.push("/signin");
-        setLoading(false);
       } else {
         handleNextStep();
       }

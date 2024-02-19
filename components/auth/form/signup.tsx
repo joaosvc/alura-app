@@ -8,6 +8,7 @@ import { IAuthFormData } from "@/components/auth/form/protocols";
 import { IAuthFormDataErrors } from "@/components/auth/form/protocols";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import FormError from "../elements/error";
 
 const steps: string[][] = [
@@ -151,7 +152,7 @@ export default function SignupForm() {
         const { confirmPassword, ...formDataRest } = formData;
 
         try {
-          const response = await fetch("/api/auth/create-user", {
+          const signupResponse = await fetch("/api/auth/create-user", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -159,10 +160,16 @@ export default function SignupForm() {
             body: JSON.stringify(formDataRest),
           });
 
-          const responseJson = await response.json();
+          const responseJson = await signupResponse.json();
 
-          if (!handleSubmitErrors(response.ok, responseJson)) {
-            router.push("/signin");
+          if (!handleSubmitErrors(signupResponse.ok, responseJson)) {
+            const signinResponse = await signIn("credentials", {
+              email: formData.email,
+              password: formData.password,
+              redirect: false,
+            });
+
+            router.push("/");
           }
         } catch (error) {
           console.error(error);

@@ -4,7 +4,7 @@ import { getCourseModules } from "@/app/api/get-course-modules/get-course-module
 import { setPageBaseTitle } from "@/client/hooks/use-page-title";
 import { User } from "@/client/structs/types/next-auth";
 import { getVideoData } from "@/app/api/get-video-data/get-video-data";
-import WatchContent from "./content";
+import WatchContent from "./watch-content";
 
 interface WatchProps extends HTMLProps<HTMLDivElement> {
   user: User;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { getCategories } from "@/app/api/get-categories/get-categories";
 import { User } from "@/client/structs/types/next-auth";
 import { HTMLProps, useEffect, useRef, useState } from "react";
@@ -39,7 +40,7 @@ export default function Categories({ user, ...props }: CategoriesProps) {
         fetchCategories();
       }
     }
-  }, [user.jwtToken]);
+  }, []);
 
   return (
     <div

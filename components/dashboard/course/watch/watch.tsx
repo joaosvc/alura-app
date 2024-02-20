@@ -105,7 +105,7 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
         fetchModules(courseUuid, user.jwtToken);
       }
     }
-  }, [courseUuid, user.jwtToken, episodes, searchParams]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {

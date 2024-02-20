@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { getCategoryModules } from "@/app/api/get-category-modules/get-category-modules";
 import { CategoryModules as ICategoryModules } from "@/client/models/category/module";
 import { User } from "@/client/structs/types/next-auth";
@@ -53,7 +54,7 @@ export default function CategoryModules({
         fetchModules(category, user.jwtToken);
       }
     }
-  }, [category, user.jwtToken]);
+  }, []);
 
   return (
     <div className="flex flex-wrap mx-auto max-w-sm lg:max-w-5xl" {...props}>

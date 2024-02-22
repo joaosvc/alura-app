@@ -26,8 +26,10 @@ export async function POST(request: Request) {
   try {
     await PrismaClient.videoProgress.upsert({
       where: {
-        userId,
-        videoIdentifier,
+        userId_videoIdentifier: {
+          userId,
+          videoIdentifier,
+        },
       },
       create: {
         userId: userId,

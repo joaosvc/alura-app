@@ -24,15 +24,17 @@ export async function POST(request: Request) {
   try {
     const videoProgress = await PrismaClient.videoProgress.findUnique({
       where: {
-        userId,
-        videoIdentifier,
+        userId_videoIdentifier: {
+          userId,
+          videoIdentifier,
+        },
       },
     });
 
     if (!videoProgress) {
       return NextResponse.json(
         { data: null, message: "Video progress not found." },
-        { status: 404 }
+        { status: 201 }
       );
     }
 

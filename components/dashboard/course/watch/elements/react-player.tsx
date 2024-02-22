@@ -50,7 +50,7 @@ const Player = ({ user, url, thumbnail, videoIdentifier }: PlayerProps) => {
   };
 
   useEffect(() => {
-    if (progress > 2 && totalProgress > 0 && progress < totalProgress - 1) {
+    if (progress > 1 && totalProgress > 0 && progress < totalProgress - 1) {
       if (savingProgress.current) {
         return;
       }

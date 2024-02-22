@@ -1,7 +1,6 @@
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  provider = "mysql"
+  url      = env("MYSQL_URL")
 }
 
 generator client {
@@ -9,12 +8,13 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String
-  lastname  String
-  password  String
-  createdAt DateTime @default(now())
+  id            Int             @id @default(autoincrement())
+  email         String          @unique
+  name          String
+  lastname      String
+  password      String
+  createdAt     DateTime        @default(now())
+  VideoProgress VideoProgress[]
 }
 
 model VideoProgress {
@@ -25,6 +25,9 @@ model VideoProgress {
   videoIdentifier String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  User            User     @relation(fields: [userId], references: [id])
 
-  @@unique([userId, videoIdentifier])
+  @@unique([userId, videoIdentifier], name: "userId_videoIdentifier")
+  @@index([userId])
+  @@index([videoIdentifier])
 }

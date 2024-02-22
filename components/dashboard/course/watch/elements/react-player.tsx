@@ -5,6 +5,8 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 import { User } from "@/client/structs/types/next-auth";
+import saveVideoProgress from "@/app/api/save-video-progress/save-video-progress";
+import getVideoProgress from "@/app/api/get-video-progress/get-video-progress";
 
 interface PlayerProps {
   user: User;
@@ -18,6 +20,7 @@ const Player = ({ user, url, thumbnail, videoIdentifier }: PlayerProps) => {
   const [totalProgress, setTotalProgress] = useState<number>(0);
   const playerRef = useRef<ReactPlayer>(null);
   const savingProgress = useRef<boolean>(false);
+  const retrievedProgress = useRef<number>(0);
 
   const handleProgress = async (state: OnProgressProps) => {
     if (progress !== state.playedSeconds) {
@@ -32,32 +35,30 @@ const Player = ({ user, url, thumbnail, videoIdentifier }: PlayerProps) => {
   };
 
   useEffect(() => {
-    if (progress > 2 && totalProgress > 0 && progress < totalProgress) {
-      const saveProgress = async () => {
-        if (savingProgress.current) return;
-        savingProgress.current = true;
+    if (playerRef.current && retrievedProgress.current < 1) {
+      getVideoProgress(user.id, videoIdentifier).then(
+        (data) => (retrievedProgress.current = data?.progress!)
+      );
+    }
+  }, []);
 
-        const response = await fetch("/api/save-video-progress", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: user.id,
-            progress,
-            totalProgress,
-            videoIdentifier,
-          }),
-        });
+  const handleReady = () => {
+    if (retrievedProgress.current > 0 && progress < 1) {
+      setProgress(retrievedProgress.current);
+      playerRef?.current?.seekTo(retrievedProgress.current);
+    }
+  };
 
-        savingProgress.current = false;
+  useEffect(() => {
+    if (progress > 2 && totalProgress > 0 && progress < totalProgress - 1) {
+      if (savingProgress.current) {
+        return;
+      }
+      savingProgress.current = true;
 
-        if (!response.ok) {
-          console.error("Failed to save video progress");
-        }
-      };
-
-      saveProgress();
+      saveVideoProgress(user.id, progress, totalProgress, videoIdentifier).then(
+        () => (savingProgress.current = false)
+      );
     }
   }, [progress]);
 
@@ -78,6 +79,7 @@ const Player = ({ user, url, thumbnail, videoIdentifier }: PlayerProps) => {
           },
         }}
         progressInterval={1000}
+        onReady={handleReady}
         onProgress={handleProgress}
         onDuration={handleDuration}
       />

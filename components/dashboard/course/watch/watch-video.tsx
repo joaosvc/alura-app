@@ -1,10 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import UnavailableBox from "@/components/elements/unavailable-box";
 import WatchSkeleton from "./skeleton";
 import Player from "./elements/react-player";
 import { BackArrowButton, NextArrowButton } from "./elements/navigation-button";
 import { VideoOptions, WatchEpisode } from "./watch";
+import { User } from "@/client/structs/types/next-auth";
 
 interface WatchVideoProps {
+  user: User;
   loading: boolean;
   loadingEpisode: boolean;
   videoOptions: VideoOptions;
@@ -14,6 +17,7 @@ interface WatchVideoProps {
 }
 
 export default function WatchVideo({
+  user,
   loading,
   loadingEpisode,
   videoOptions,
@@ -40,8 +44,10 @@ export default function WatchVideo({
       <div className="bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden relative max-w-[1280px] w-full pt-[56.25%]">
         <div className="absolute top-0 left-0 w-full h-full">
           <Player
+            user={user}
             url={videoOptions?.url!}
             thumbnail={videoOptions?.thumbnail}
+            videoIdentifier={videoOptions?.identifier}
           />
         </div>
       </div>

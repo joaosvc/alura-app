@@ -5,6 +5,7 @@ import { setPageBaseTitle } from "@/client/hooks/use-page-title";
 import { User } from "@/client/structs/types/next-auth";
 import { getVideoData } from "@/app/api/get-video-data/get-video-data";
 import WatchContent from "./watch-content";
+import { getVideoIdentifierFrom } from "@/client/hooks/video-data-identifier";
 
 interface WatchProps extends HTMLProps<HTMLDivElement> {
   user: User;
@@ -25,6 +26,7 @@ export interface WatchEpisode {
 
 export interface VideoOptions {
   episode: number;
+  identifier: string;
   name: string;
   url: string;
   thumbnail: string;
@@ -44,7 +46,7 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
     if (!isMounted.current) {
       isMounted.current = true;
 
-      const fetchModules = async (courseUuid: string, jwtToken: string) => {
+      const fetchEpisodes = async (courseUuid: string, jwtToken: string) => {
         setLoading(true);
 
         try {
@@ -102,7 +104,7 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
       };
 
       if (courseUuid && user.jwtToken) {
-        fetchModules(courseUuid, user.jwtToken);
+        fetchEpisodes(courseUuid, user.jwtToken);
       }
     }
   }, []);
@@ -138,6 +140,11 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
             name: video.name,
             url: videoData.body!.url,
             thumbnail: videoData.body!.thumbnail,
+            identifier: getVideoIdentifierFrom(
+              courseUuid,
+              module.identifier,
+              video.identifier
+            ),
           });
         }
 
@@ -154,6 +161,7 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
       {...props}
     >
       <WatchContent
+        user={user}
         videoOptions={videoOptions!}
         episodes={episodes}
         isAvailable={isAvailable}

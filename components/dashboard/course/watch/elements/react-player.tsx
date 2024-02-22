@@ -1,17 +1,65 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
+import { OnProgressProps } from "react-player/base";
+import { User } from "@/client/structs/types/next-auth";
 
 interface PlayerProps {
+  user: User;
   url: string;
   thumbnail: string;
+  videoIdentifier: string;
 }
 
-const Player = ({ url, thumbnail }: PlayerProps) => {
+const Player = ({ user, url, thumbnail, videoIdentifier }: PlayerProps) => {
+  const [progress, setProgress] = useState<number>(0);
+  const [totalProgress, setTotalProgress] = useState<number>(0);
+  const playerRef = useRef<ReactPlayer>(null);
+
+  const handleProgress = async (state: OnProgressProps) => {
+    if (progress !== state.playedSeconds) {
+      setProgress(state.playedSeconds);
+    }
+  };
+
+  const handleDuration = (duration: number) => {
+    if (totalProgress !== duration) {
+      setTotalProgress(duration);
+    }
+  };
+
+  useEffect(() => {
+    if (progress > 2 && totalProgress > 0 && progress < totalProgress) {
+      const saveProgress = async () => {
+        const response = await fetch("/api/save-video-progress", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            progress,
+            totalProgress,
+            videoIdentifier,
+          }),
+        });
+
+        if (!response.ok) {
+          console.log(await response.json());
+          console.error("Failed to save video progress");
+        }
+      };
+
+      saveProgress();
+    }
+  }, [progress]);
+
   return (
     <>
       <ReactPlayer
+        ref={playerRef}
         controls={true}
         url={url}
         width="100%"
@@ -24,6 +72,9 @@ const Player = ({ url, thumbnail }: PlayerProps) => {
             },
           },
         }}
+        progressInterval={1000}
+        onProgress={handleProgress}
+        onDuration={handleDuration}
       />
     </>
   );

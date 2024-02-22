@@ -3,8 +3,10 @@ import React from "react";
 import WatchNavigation from "./elements/watch-navigation";
 import WatchVideo from "./watch-video";
 import { VideoOptions, WatchEpisode } from "./watch";
+import { User } from "@/client/structs/types/next-auth";
 
 interface WatchContentProps {
+  user: User;
   videoOptions: VideoOptions;
   episodes: WatchEpisode[];
   isAvailable: boolean;
@@ -14,6 +16,7 @@ interface WatchContentProps {
 }
 
 const WatchContent = ({
+  user,
   videoOptions,
   episodes,
   isAvailable,
@@ -30,6 +33,7 @@ const WatchContent = ({
   return (
     <>
       <WatchVideo
+        user={user}
         loading={loading}
         loadingEpisode={loadingEpisode}
         isAvailable={isAvailable}

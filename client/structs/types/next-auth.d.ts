@@ -1,6 +1,7 @@
 import { User as AuthUser } from "next-auth";
 
 interface User {
+  id: number;
   name: string;
   lastname: string;
   email: string;

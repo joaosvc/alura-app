@@ -47,7 +47,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error("invalid-credentials");
         }
 
-        return { ...existingUser, id: existingUser.id.toString() };
+        return { ...existingUser };
       },
     }),
   ],
@@ -59,6 +59,7 @@ export const authOptions: NextAuthOptions = {
       return {
         ...session,
         user: {
+          id: token.id,
           name: token.name,
           lastname: token.lastname,
           email: token.email,
@@ -73,6 +74,7 @@ export const authOptions: NextAuthOptions = {
           "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHBpcmVzIjoxNzA5MzIzOTEwNDg4fQ.Djo3Lir4OkXUD53gQw-FwlolEMKQ4S93U9LPBF13wftLJH-kWuOw68YtGx2c8Q6YPWPLkqELxGvaxIIv8uee9g";
 
         token = {
+          id: user.id,
           name: user.name,
           lastname: user.lastname,
           email: user.email,

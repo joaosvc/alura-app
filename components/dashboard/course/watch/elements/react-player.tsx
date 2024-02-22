@@ -17,6 +17,7 @@ const Player = ({ user, url, thumbnail, videoIdentifier }: PlayerProps) => {
   const [progress, setProgress] = useState<number>(0);
   const [totalProgress, setTotalProgress] = useState<number>(0);
   const playerRef = useRef<ReactPlayer>(null);
+  const savingProgress = useRef<boolean>(false);
 
   const handleProgress = async (state: OnProgressProps) => {
     if (progress !== state.playedSeconds) {
@@ -33,6 +34,9 @@ const Player = ({ user, url, thumbnail, videoIdentifier }: PlayerProps) => {
   useEffect(() => {
     if (progress > 2 && totalProgress > 0 && progress < totalProgress) {
       const saveProgress = async () => {
+        if (savingProgress.current) return;
+        savingProgress.current = true;
+
         const response = await fetch("/api/save-video-progress", {
           method: "POST",
           headers: {
@@ -46,8 +50,9 @@ const Player = ({ user, url, thumbnail, videoIdentifier }: PlayerProps) => {
           }),
         });
 
+        savingProgress.current = false;
+
         if (!response.ok) {
-          console.log(await response.json());
           console.error("Failed to save video progress");
         }
       };

@@ -1,4 +1,4 @@
-import { ALURA_API_URL } from "@/client/api/protocols";
+import { ALURA_API_URL } from "@/client/hooks/get-alura-api";
 import { RequestResponse } from "../protocols";
 import { RequestError, SuccessRequest } from "../helpers";
 import { Video } from "@/client/models/course/video";

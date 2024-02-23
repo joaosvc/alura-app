@@ -1,4 +1,4 @@
-import { ALURA_API_URL } from "@/client/api/protocols";
+import { ALURA_API_URL } from "@/client/hooks/get-alura-api";
 import { Category } from "@/client/models/category/category";
 import { RequestResponse } from "../protocols";
 import { RequestError, SuccessRequest } from "../helpers";

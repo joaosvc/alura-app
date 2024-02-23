@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import UnavailableBox from "@/components/elements/unavailable-box";
-import WatchSkeleton from "./skeleton";
+import WatchSkeleton from "./watch-skeleton";
 import Player from "./elements/react-player";
 import { BackArrowButton, NextArrowButton } from "./elements/navigation-button";
 import { VideoOptions, WatchEpisode } from "./watch";

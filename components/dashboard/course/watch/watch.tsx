@@ -143,7 +143,8 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
             identifier: getVideoIdentifierFrom(
               courseUuid,
               module.identifier,
-              video.identifier
+              video.identifier,
+              episode
             ),
           });
         }

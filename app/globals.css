@@ -27,3 +27,12 @@
 *::-webkit-scrollbar-thumb-horizontal {
   background: rgb(55, 65, 81);
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

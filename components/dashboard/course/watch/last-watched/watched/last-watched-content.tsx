@@ -50,9 +50,8 @@ export default function LastWatchedContent({
       </div>
 
       <div className="relative mt-4 w-full">
-        {lastWatched.length === 0 ? (
+        {lastWatched.length > 0 ? (
           <>
-            {" "}
             <div
               className="grid grid-flow-col w-full h-full overflow-x-auto md:overflow-hidden overscroll-x-auto space-x-2 justify-start hide-scrollbar"
               ref={watchContainer}

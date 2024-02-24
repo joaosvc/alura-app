@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: PageDefaultTitle,
-  description: "Alura App - Courses Packages",
+  description: "Alura App",
 };
 
 export default function RootLayout({

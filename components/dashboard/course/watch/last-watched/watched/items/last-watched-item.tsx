@@ -52,7 +52,7 @@ export default function LastWatchedItem({ user, item }: LastWatchedItemProps) {
             });
           } else {
             setVideoData({
-              name: "Vídeo não encontrado",
+              name: "Não foi possível carregar o vídeo",
               thumbnail: "",
               courseId: courseUuid,
               episode: episode,

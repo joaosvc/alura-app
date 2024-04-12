@@ -56,6 +56,8 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
         setLoading(true);
 
         try {
+          searchParams.current = new URLSearchParams(window.location.search);
+
           const modulesResponse = await getCourseModules(courseUuid, jwtToken);
 
           if (modulesResponse.success) {
@@ -77,8 +79,6 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
                 },
               }))
             );
-
-            searchParams.current = new URLSearchParams(window.location.search);
 
             const episodeParam = searchParams.current.get("episode") || -1;
             const episodeIndex = episodes.findIndex(
@@ -131,8 +131,6 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
           `${window.location.pathname}?${searchParams.current?.toString()}`
         );
 
-        if (videoOptions) videoOptions.episode = episode;
-
         const videoData = await getVideoData(
           courseUuid,
           module.identifier,
@@ -140,21 +138,27 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
           user.jwtToken
         );
 
+        const newVideoOptions: VideoOptions = {
+          episode: episode,
+          name: video.name,
+          url: "",
+          thumbnail: "",
+          identifier: getVideoIdentifierFrom(
+            courseUuid,
+            module.identifier,
+            video.identifier,
+            episode
+          ),
+        };
+
         if (videoData.success) {
-          setVideoOptions({
-            episode,
-            name: video.name,
-            url: videoData.body!.url,
-            thumbnail: videoData.body!.thumbnail,
-            identifier: getVideoIdentifierFrom(
-              courseUuid,
-              module.identifier,
-              video.identifier,
-              episode
-            ),
-          });
+          const { url, thumbnail } = videoData.body!;
+
+          newVideoOptions.url = url;
+          newVideoOptions.thumbnail = thumbnail;
         }
 
+        setVideoOptions(newVideoOptions);
         setLoadingEpisode(false);
       }
     };

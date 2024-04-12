@@ -16,6 +16,31 @@ interface WatchVideoProps {
   handleEpisodeChange: (episode: number) => void;
 }
 
+const VideoPlayer = ({
+  user,
+  videoOptions,
+}: {
+  user: User;
+  videoOptions: VideoOptions;
+}) => {
+  if (!videoOptions.url) {
+    return (
+      <p className="text-2xl text-gray-700 dark:text-gray-200">
+        Vídeo não disponível
+      </p>
+    );
+  }
+
+  return (
+    <Player
+      user={user}
+      url={videoOptions?.url!}
+      thumbnail={videoOptions?.thumbnail}
+      videoIdentifier={videoOptions?.identifier}
+    />
+  );
+};
+
 export default function WatchVideo({
   user,
   loading,
@@ -43,12 +68,7 @@ export default function WatchVideo({
     <>
       <div className="bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden relative max-w-[1280px] w-full pt-[56.25%]">
         <div className="absolute top-0 left-0 w-full h-full">
-          <Player
-            user={user}
-            url={videoOptions?.url!}
-            thumbnail={videoOptions?.thumbnail}
-            videoIdentifier={videoOptions?.identifier}
-          />
+          <VideoPlayer user={user} videoOptions={videoOptions} />
         </div>
       </div>
 

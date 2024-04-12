@@ -35,20 +35,32 @@ export default function LastWatchedItem({ user, item }: LastWatchedItemProps) {
         );
         setLoading(true);
 
-        const videoDataResponse = await getVideoData(
-          courseUuid,
-          module,
-          video,
-          user.jwtToken
-        );
+        try {
+          const videoDataResponse = await getVideoData(
+            courseUuid,
+            module,
+            video,
+            user.jwtToken
+          );
 
-        if (videoDataResponse.success) {
-          setVideoData({
-            name: videoDataResponse?.body!.name,
-            thumbnail: videoDataResponse?.body!.thumbnail,
-            courseId: courseUuid,
-            episode: episode,
-          });
+          if (videoDataResponse.success) {
+            setVideoData({
+              name: videoDataResponse?.body!.name,
+              thumbnail: videoDataResponse?.body!.thumbnail,
+              courseId: courseUuid,
+              episode: episode,
+            });
+          } else {
+            setVideoData({
+              name: "Vídeo não encontrado",
+              thumbnail: "",
+              courseId: courseUuid,
+              episode: episode,
+            });
+          }
+        } catch (error) {
+          console.error(`Error fetching video data`, error);
+        } finally {
           setLoading(false);
         }
       };

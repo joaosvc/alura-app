@@ -25,9 +25,12 @@ const VideoPlayer = ({
 }) => {
   if (!videoOptions.url) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-2xl text-gray-700 dark:text-gray-200 font-bold text-center">
+      <div className="flex flex-col items-center justify-center h-full">
+        <p className="text-2xl text-gray-700 dark:text-gray-200 font-bold text-center mb-2">
           Não foi possível carregar o vídeo
+        </p>
+        <p className="text-sm text-gray-700 dark:text-gray-200 text-center">
+          Tente entrar em contato com o provedor
         </p>
       </div>
     );

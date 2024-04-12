@@ -168,7 +168,7 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
 
   return (
     <div
-      className="w-[90vw] lg:w-[60vw] mx-auto mt-4 space-y-3 rounded-xl mb-4"
+      className="w-[90vw] lg:w-[60vw] mx-auto mt-3 space-y-3 rounded-xl mb-3"
       {...props}
     >
       <WatchContent

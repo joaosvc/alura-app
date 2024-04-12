@@ -20,6 +20,7 @@ export const getVideoData = async (
       module: String(module ?? ""),
       video: String(video ?? ""),
       thumbnail: true,
+      videoUrl: false,
     }),
   });
 

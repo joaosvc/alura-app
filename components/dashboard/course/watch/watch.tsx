@@ -38,7 +38,13 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
   const [loading, setLoading] = useState(true);
   const [loadingEpisode, setLoadingEpisode] = useState(true);
   const [currentEpisode, setCurrentEpisode] = useState(0);
-  const [videoOptions, setVideoOptions] = useState<VideoOptions>();
+  const [videoOptions, setVideoOptions] = useState<VideoOptions>({
+    episode: 0,
+    identifier: "nullable-video",
+    name: "Não foi possível carregar o vídeo",
+    url: "",
+    thumbnail: "",
+  });
   const searchParams = useRef<URLSearchParams>();
   const isMounted = useRef(false);
 
@@ -168,7 +174,7 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
         isAvailable={isAvailable}
         loading={loading}
         loadingEpisode={loadingEpisode}
-        onEpisodeChange={(episode) => setCurrentEpisode(episode)}
+        onEpisodeChange={(episode: number) => setCurrentEpisode(episode)}
       />
     </div>
   );

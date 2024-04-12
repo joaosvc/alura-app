@@ -30,7 +30,7 @@ const VideoPlayer = ({
           Não foi possível carregar o vídeo
         </p>
         <p className="text-sm text-gray-700 dark:text-gray-200 text-center">
-          Tente entrar em contato com o provedor
+          Tente recarregar a página ou entre em contato com o suporte
         </p>
       </div>
     );

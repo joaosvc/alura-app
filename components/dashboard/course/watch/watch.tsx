@@ -135,7 +135,9 @@ export default function Watch({ user, courseUuid, ...props }: WatchProps) {
           courseUuid,
           module.identifier,
           video.identifier,
-          user.jwtToken
+          user.jwtToken,
+          true,
+          true
         );
 
         const newVideoOptions: VideoOptions = {

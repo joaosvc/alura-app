@@ -7,7 +7,9 @@ export const getVideoData = async (
   courseUuid: string,
   module: string,
   video: string,
-  jwtToken: string
+  jwtToken: string,
+  thumbnail: boolean = true,
+  videoUrl: boolean = false
 ): Promise<RequestResponse<Video>> => {
   const response = await fetch(`${ALURA_API_URL}/course/video`, {
     method: "POST",
@@ -19,8 +21,8 @@ export const getVideoData = async (
       courseId: String(courseUuid ?? ""),
       module: String(module ?? ""),
       video: String(video ?? ""),
-      thumbnail: true,
-      videoUrl: false,
+      thumbnail: thumbnail,
+      videoUrl: videoUrl,
     }),
   });
 

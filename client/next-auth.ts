@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token }) {
       token.jwtToken =
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHBpcmVzIjoxNzE3MzM2NjMyMjQ4fQ.iHdKZoZz859V_-QMEFDnpJ54oLhMoKr7SiOIZX1gsmyoNfKVmqlzs9Lwq6q5bSpx3dFIRn0zVIONGqvYMfQMLg"";
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHBpcmVzIjoxNzE3MzM2NjMyMjQ4fQ.iHdKZoZz859V_-QMEFDnpJ54oLhMoKr7SiOIZX1gsmyoNfKVmqlzs9Lwq6q5bSpx3dFIRn0zVIONGqvYMfQMLg";
 
       return {
         ...session,
@@ -71,7 +71,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         /** FAKE JWT TOKEN */
         user.jwtToken =
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHBpcmVzIjoxNzE3MzM2NjMyMjQ4fQ.iHdKZoZz859V_-QMEFDnpJ54oLhMoKr7SiOIZX1gsmyoNfKVmqlzs9Lwq6q5bSpx3dFIRn0zVIONGqvYMfQMLg"";
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHBpcmVzIjoxNzE3MzM2NjMyMjQ4fQ.iHdKZoZz859V_-QMEFDnpJ54oLhMoKr7SiOIZX1gsmyoNfKVmqlzs9Lwq6q5bSpx3dFIRn0zVIONGqvYMfQMLg";
 
         token = {
           id: user.id,

@@ -19,7 +19,7 @@
     "@types/video.js": "^7.3.56",
     "bcrypt": "^5.1.1",
     "framer-motion": "^11.0.3",
-    "next": "14.1.0",
+    "next": "14.1.1",
     "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",

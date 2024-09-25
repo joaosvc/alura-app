@@ -272,7 +272,7 @@ export default function SignupForm() {
         loading={loading}
         currentFieldsFilled={currentFieldsFilled}
         handleBackStep={handleBackStep}
-        holder="Crie uma conta"
+        holder="Criar conta"
         onHolder="Criando..."
       />
 

@@ -178,7 +178,7 @@ export default function SigninForm() {
         loading={loading}
         currentFieldsFilled={currentFieldsFilled}
         handleBackStep={handleBackStep}
-        holder="Entrar na sua conta"
+        holder="Entrar"
         onHolder="Entrando..."
       />
 

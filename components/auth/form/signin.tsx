@@ -179,7 +179,7 @@ export default function SigninForm() {
         currentFieldsFilled={currentFieldsFilled}
         handleBackStep={handleBackStep}
         holder="Entrar na sua conta"
-        onHolder="Entrando na conta..."
+        onHolder="Entrando..."
       />
 
       <FormAccountLink href="signup" holder="Crie aqui">

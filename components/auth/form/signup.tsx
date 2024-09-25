@@ -273,7 +273,7 @@ export default function SignupForm() {
         currentFieldsFilled={currentFieldsFilled}
         handleBackStep={handleBackStep}
         holder="Crie uma conta"
-        onHolder="Criando conta..."
+        onHolder="Criando..."
       />
 
       <FormAccountLink href="signin" holder="Faça login aqui">

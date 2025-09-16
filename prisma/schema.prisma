@@ -1,33 +1,34 @@
 datasource db {
-  provider = "mysql"
-  url      = env("MYSQL_URL")
+    provider = "postgresql"
+    url      = env("POSTGRES_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+    provider   = "prisma-client-js"
+    engineType = "binary"
 }
 
 model User {
-  id            Int             @id @default(autoincrement())
-  email         String          @unique
-  name          String
-  lastname      String
-  password      String
-  createdAt     DateTime        @default(now())
-  VideoProgress VideoProgress[]
+    id            Int             @id @default(autoincrement())
+    email         String          @unique
+    name          String
+    lastname      String
+    password      String
+    createdAt     DateTime        @default(now())
+    VideoProgress VideoProgress[]
 }
 
 model VideoProgress {
-  id              Int      @id @default(autoincrement())
-  userId          Int
-  progress        Int
-  totalProgress   Int
-  videoIdentifier String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  User            User     @relation(fields: [userId], references: [id])
+    id              Int      @id @default(autoincrement())
+    userId          Int
+    progress        Int
+    totalProgress   Int
+    videoIdentifier String
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
+    User            User     @relation(fields: [userId], references: [id])
 
-  @@unique([userId, videoIdentifier], name: "userId_videoIdentifier")
-  @@index([userId])
-  @@index([videoIdentifier])
+    @@unique([userId, videoIdentifier], name: "userId_videoIdentifier")
+    @@index([userId])
+    @@index([videoIdentifier])
 }
